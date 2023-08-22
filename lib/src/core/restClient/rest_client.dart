@@ -1,0 +1,29 @@
+
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
+import 'package:dw_barbershop/src/core/restClient/interceptors/auth_interceptor.dart';
+
+final class RestClient extends DioForNative{
+  RestClient() : super(BaseOptions(
+    baseUrl: 'http://2804:858:f24c:a900:8598:5e91:93a2:fd1d:8080/',
+    connectTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 60)
+  )){
+    interceptors.addAll([
+      LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+      ),
+      AuthInterceptor(),
+    ]);
+  }
+  RestClient get auth {
+    options.extra['DIO_AUTH_KEY'] = true;
+        return this;
+  }
+
+  RestClient get unAuth {
+    options.extra['DIO_AUTH_KEY'] = false;
+    return this;
+  }
+}
